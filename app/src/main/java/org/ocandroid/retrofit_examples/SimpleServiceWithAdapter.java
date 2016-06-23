@@ -59,22 +59,31 @@ public final class SimpleServiceWithAdapter {
 
     // Create an instance of our GitHub API interface.
     GitHub github = retrofit.create(GitHub.class);
-    github.repos("ivanph")
-        .flatMap(new Func1<List<Repo>, Observable<Repo>>() {
-          @Override public Observable<Repo> call(List<Repo> repos) {
-            return Observable.from(repos);
-          }
-        })
-        .filter(new Func1<Repo, Boolean>() {
-          @Override public Boolean call(Repo repo) {
-            return !repo.fork;
-          }
-        })
-        .subscribe(new Action1<Repo>() {
-          @Override public void call(Repo repo) {
-            System.out.println(repo.name + " (" + repo.stars + ")");
+    github.repos("square")
+        .subscribe(new Action1<List<Repo>>() {
+          @Override public void call(List<Repo> repos) {
+            for (Repo repo:repos) {
+              System.out.println(repo.name + " (" + repo.stars + ")");
+            }
           }
         });
+
+    //github.repos("ivanph")
+    //    .flatMap(new Func1<List<Repo>, Observable<Repo>>() {
+    //      @Override public Observable<Repo> call(List<Repo> repos) {
+    //        return Observable.from(repos);
+    //      }
+    //    })
+    //    .filter(new Func1<Repo, Boolean>() {
+    //      @Override public Boolean call(Repo repo) {
+    //        return !repo.fork;
+    //      }
+    //    })
+    //    .subscribe(new Action1<Repo>() {
+    //      @Override public void call(Repo repo) {
+    //        System.out.println(repo.name + " (" + repo.stars + ")");
+    //      }
+    //    });
 
     //github.repos("ivanph")
     //    .flatMap(Observable::from)
